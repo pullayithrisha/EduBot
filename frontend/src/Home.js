@@ -4,6 +4,7 @@ import { GrAdd } from "react-icons/gr";
 import axios from 'axios';
 
 function Home() {
+  const [generatedQuestions, setGeneratedQuestions] = useState([]);
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
@@ -57,6 +58,7 @@ function Home() {
 
       if (response.data.questions) {
         console.log('Generated Questions:', response.data.questions);
+        setGeneratedQuestions(response.data.questions);
       }
 
     } catch (error) {
@@ -66,7 +68,7 @@ function Home() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0F1D3D' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#0F1D3D', paddingBottom: '150px' }}>
       <div
         className='container'
         style={{
@@ -167,6 +169,28 @@ function Home() {
           style={{ display: 'none' }}
         />
       </div>
+
+      {/* Generated Questions */}
+      {generatedQuestions.length > 0 && (
+        <div style={{ color: 'white', padding: '30px 50px' }}>
+          <h2>Generated Questions:</h2>
+          <ol>
+            {generatedQuestions.map((q, index) => (
+              <li key={index} style={{ marginBottom: '20px' }}>
+                <p><strong>Q{index + 1}:</strong> {q.question}</p>
+                {q.options && (
+                  <ul>
+                    {q.options.map((opt, i) => (
+                      <li key={i}>{opt}</li>
+                    ))}
+                  </ul>
+                )}
+                <p><strong>Answer:</strong> {String(q.answer)}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
     </div>
   );
 }
