@@ -23,7 +23,7 @@ function Home() {
         file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
     ) {
       setFileName(file.name);
-      setSelectedFile(file); // store the file for upload
+      setSelectedFile(file);
       console.log('File selected:', file.name);
     } else {
       alert('Please select a valid PDF or Word (.docx) file');
@@ -87,7 +87,6 @@ function Home() {
           color: 'white',
         }}
       >
-        {/* Left side: + icon and file name or instruction text */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div
             onClick={handleAddClick}
@@ -104,14 +103,11 @@ function Home() {
           >
             <GrAdd color="#12234B" size={20} />
           </div>
-
-          {/* Show either file name or instruction text */}
           <p style={{ margin: 0, fontSize: '16px' }}>
             {fileName ? fileName : 'Upload a PDF or Word file to begin'}
           </p>
         </div>
 
-        {/* Right side: options (only show if file is selected) */}
         {fileName && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <select
@@ -160,7 +156,6 @@ function Home() {
           </div>
         )}
 
-        {/* Hidden file input */}
         <input
           ref={fileInputRef}
           onChange={handleFileChange}
@@ -178,14 +173,18 @@ function Home() {
             {generatedQuestions.map((q, index) => (
               <li key={index} style={{ marginBottom: '20px' }}>
                 <p><strong>Q{index + 1}:</strong> {q.question}</p>
-                {q.options && (
-                  <ul>
+
+                {Array.isArray(q.options) && q.options.length > 0 && (
+                  <ul style={{ listStyleType: 'none', paddingLeft: '20px' }}>
                     {q.options.map((opt, i) => (
-                      <li key={i}>{opt}</li>
+                      <li key={i}>
+                        <strong>{String.fromCharCode(65 + i)}.</strong> {opt}
+                      </li>
                     ))}
                   </ul>
                 )}
-                <p><strong>Answer:</strong> {String(q.answer)}</p>
+
+                <p><strong>Answer:</strong> {q.answer}</p>
               </li>
             ))}
           </ol>
